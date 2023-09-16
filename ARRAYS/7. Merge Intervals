@@ -1,0 +1,23 @@
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        List<int[]> resultList = new ArrayList<>();
+        
+        for (int[] interval : intervals) {
+            if (resultList.isEmpty()) {
+                resultList.add(interval);
+            } else {
+                int[] prevInterval = resultList.get(resultList.size() - 1);
+                
+                if (interval[0] <= prevInterval[1]) {
+                    // Merge the overlapping intervals
+                    prevInterval[1] = Math.max(prevInterval[1], interval[1]);
+                } else {
+                    resultList.add(interval);
+                }
+            }
+        }
+        
+        return resultList.toArray(new int[resultList.size()][]);
+    }
+}
