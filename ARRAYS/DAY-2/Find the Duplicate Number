@@ -1,0 +1,76 @@
+
+
+Given an array `nums` containing n + 1 integers where each integer is between 1 and n (inclusive), find the duplicate number.
+
+### Brute Force Approach:
+
+The brute force approach involves checking every pair of elements in the array to find if any of them are duplicates. This can be done using two nested loops. Here's how you can implement it:
+
+```java
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (nums[i] == nums[j]) {
+                    return nums[i];
+                }
+            }
+        }
+        return -1; // No duplicate found
+    }
+}
+```
+
+However, this brute force approach has a time complexity of O(n^2), which might not be efficient for large arrays.
+
+### Optimized Approach:
+
+An optimized approach involves using a HashSet to keep track of visited elements. We iterate through the array, and if we encounter an element that is already present in the HashSet, we return that element as it is the duplicate. Here's how you can implement it:
+
+```java
+import java.util.HashSet;
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+        HashSet<Integer> seen = new HashSet<>();
+        for (int num : nums) {
+            if (seen.contains(num)) {
+                return num;
+            }
+            seen.add(num);
+        }
+        return -1; // No duplicate found
+    }
+}
+```
+
+This approach has a time complexity of O(n) and a space complexity of O(n) due to the HashSet.
+
+### Most Optimized Approach (Cycle Detection):
+
+The most optimized approach uses cycle detection similar to Floyd's Tortoise and Hare algorithm. We treat the array as a linked list where each element points to the value at the index equal to its value. Then, we find the intersection point of the slow and fast pointers to determine the duplicate number. Here's how you can implement it:
+
+```java
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int slow = nums[0];
+        int fast = nums[0];
+        
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+        
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        
+        return slow;
+    }
+}
+```
+
+This approach has a time complexity of O(n) and a space complexity of O(1). It's the most efficient solution for finding the duplicate number in an array.
