@@ -1,0 +1,117 @@
+Sure, let's approach the problem "Repeat and Missing Number Array" with different strategies:
+
+### Brute Force Approach:
+In the brute force approach, we can iterate through each element in the array and for each element, check if it appears multiple times and also if the next consecutive number is present.
+
+```java
+public class Solution {
+    public int[] repeatedNumber(final int[] A) {
+        int[] result = new int[2];
+        int n = A.length;
+        
+        for (int i = 0; i < n; i++) {
+            int count = 0;
+            for (int j = 0; j < n; j++) {
+                if (A[i] == A[j]) {
+                    count++;
+                }
+            }
+            if (count == 2) {
+                result[0] = A[i];
+            } else if (count == 0) {
+                result[1] = A[i];
+            }
+        }
+        
+        for (int i = 1; i <= n; i++) {
+            boolean found = false;
+            for (int j = 0; j < n; j++) {
+                if (A[j] == i) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                result[1] = i;
+                break;
+            }
+        }
+        
+        return result;
+    }
+}
+```
+
+This approach has a time complexity of O(n^2) because of the nested loops.
+
+### Optimized Approach using Sorting:
+We can sort the array first and then check for consecutive duplicates to find the repeated number. Additionally, we can maintain a separate array to mark which numbers are present.
+
+```java
+import java.util.Arrays;
+
+public class Solution {
+    public int[] repeatedNumber(final int[] A) {
+        int[] result = new int[2];
+        Arrays.sort(A);
+        int n = A.length;
+        
+        for (int i = 1; i < n; i++) {
+            if (A[i] == A[i - 1]) {
+                result[0] = A[i];
+                break;
+            }
+        }
+        
+        boolean[] present = new boolean[n + 1];
+        for (int num : A) {
+            present[num] = true;
+        }
+        for (int i = 1; i <= n; i++) {
+            if (!present[i]) {
+                result[1] = i;
+                break;
+            }
+        }
+        
+        return result;
+    }
+}
+```
+
+This approach has a time complexity of O(n log n) due to the sorting operation.
+
+### Most Optimized Approach using Math:
+We can utilize mathematical properties to find the repeated and missing numbers in a single pass through the array.
+
+```java
+public class Solution {
+    public int[] repeatedNumber(final int[] A) {
+        int[] result = new int[2];
+        long sum = 0;
+        long squareSum = 0;
+        int n = A.length;
+        
+        for (int num : A) {
+            sum += num;
+            squareSum += (long) num * num;
+        }
+        
+        long actualSum = (long) n * (n + 1) / 2;
+        long actualSquareSum = (long) n * (n + 1) * (2 * n + 1) / 6;
+        
+        long diff1 = actualSum - sum;
+        long diff2 = actualSquareSum - squareSum;
+        
+        int missing = (int) ((diff2 + diff1 * diff1) / (2 * diff1));
+        int repeated = (int) (missing - diff1);
+        
+        result[0] = repeated;
+        result[1] = missing;
+        
+        return result;
+    }
+}
+```
+
+This approach has a time complexity of O(n) and does not require additional space, providing the most optimized solution for the problem.
