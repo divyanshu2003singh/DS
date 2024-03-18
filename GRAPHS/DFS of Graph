@@ -1,0 +1,34 @@
+class Solution {
+    // Function to perform Depth-First Search traversal of the graph.
+    public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+        // Initialize an array to keep track of visited vertices.
+        boolean[] visited = new boolean[V];
+        
+        // Initialize an ArrayList to store the DFS traversal result.
+        ArrayList<Integer> dfsTraversal = new ArrayList<>();
+        
+        // Start DFS traversal from each vertex if not visited yet.
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfsUtil(i, adj, visited, dfsTraversal);
+            }
+        }
+        
+        // Return the DFS traversal result.
+        return dfsTraversal;
+    }
+    
+    // Recursive utility function to perform DFS traversal.
+    private void dfsUtil(int v, ArrayList<ArrayList<Integer>> adj, boolean[] visited, ArrayList<Integer> dfsTraversal) {
+        // Mark the current vertex as visited and add it to the DFS traversal.
+        visited[v] = true;
+        dfsTraversal.add(v);
+        
+        // Visit all adjacent vertices of the current vertex.
+        for (int adjVertex : adj.get(v)) {
+            if (!visited[adjVertex]) {
+                dfsUtil(adjVertex, adj, visited, dfsTraversal);
+            }
+        }
+    }
+}
