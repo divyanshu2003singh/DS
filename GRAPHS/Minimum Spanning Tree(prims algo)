@@ -1,0 +1,60 @@
+
+class Solution {
+    static class Edge implements Comparable<Edge> {
+        int dest, weight;
+        
+        Edge(int d, int w) {
+            dest = d;
+            weight = w;
+        }
+        
+        public int compareTo(Edge compareEdge) {
+            return this.weight - compareEdge.weight;
+        }
+    }
+    
+    static int spanningTree(int V, int E, int edges[][]) {
+        List<List<Edge>> adjList = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            adjList.add(new ArrayList<>());
+        }
+
+        // Construct the adjacency list
+        for (int i = 0; i < E; i++) {
+            int src = edges[i][0];
+            int dest = edges[i][1];
+            int weight = edges[i][2];
+            adjList.get(src).add(new Edge(dest, weight));
+            adjList.get(dest).add(new Edge(src, weight));
+        }
+        
+        boolean[] visited = new boolean[V];
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        
+        // Start Prim's algorithm from vertex 0
+        pq.add(new Edge(0, 0));
+        int minCost = 0;
+        
+        while (!pq.isEmpty()) {
+            Edge current = pq.poll();
+            int currentVertex = current.dest;
+            
+            // If vertex is already visited, continue to next iteration
+            if (visited[currentVertex])
+                continue;
+            
+            // Mark the current vertex as visited
+            visited[currentVertex] = true;
+            minCost += current.weight;
+            
+            // Explore adjacent vertices
+            for (Edge neighbor : adjList.get(currentVertex)) {
+                if (!visited[neighbor.dest]) {
+                    pq.add(new Edge(neighbor.dest, neighbor.weight));
+                }
+            }
+        }
+        
+        return minCost;
+    }
+}
