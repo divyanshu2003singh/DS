@@ -1,0 +1,31 @@
+
+class Solution {
+    // Function to return Breadth First Traversal of given graph.
+    public ArrayList<Integer> bfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
+        ArrayList<Integer> bfsTraversal = new ArrayList<>();
+        boolean[] visited = new boolean[V];
+        Queue<Integer> queue = new LinkedList<>();
+
+        // Starting vertex (You can start from any vertex, let's choose 0)
+        int startVertex = 0;
+
+        // Mark the starting vertex as visited and enqueue it
+        visited[startVertex] = true;
+        queue.offer(startVertex);
+
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            bfsTraversal.add(vertex);
+
+            // Process neighbors of the current vertex
+            for (int neighbor : adj.get(vertex)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.offer(neighbor);
+                }
+            }
+        }
+
+        return bfsTraversal;
+    }
+}
